@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Game = require("./Game");
 const jwt = require("jsonwebtoken");
 const playerSchema = new Schema(
 	{
@@ -10,6 +11,12 @@ const playerSchema = new Schema(
 			unique: true,
 			default: "ANONYMOUS",
 		},
+		games: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "Game",
+			},
+		],
 		tokens: [
 			{
 				token: { type: String, required: true },
@@ -18,6 +25,7 @@ const playerSchema = new Schema(
 	},
 	{ timestamps: true }
 );
+
 playerSchema.statics.checkExistingPlayer = async function (username, next) {
 	// replaced req.body.username with username
 
@@ -41,6 +49,13 @@ playerSchema.methods.generateAuthToken = async function () {
 	await player.save();
 	return token;
 };
-const Player = mongoose.model("Player", playerSchema);
 
+playerSchema.post("findOneAndDelete", async function (data) {
+	if (data.games.length) {
+		const res = await Game.deleteMany({ _id: { $in: data.games } });
+		console.log(res);
+	}
+});
+
+const Player = mongoose.model("Player", playerSchema);
 module.exports = Player;
