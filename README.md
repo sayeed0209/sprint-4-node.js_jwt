@@ -13,7 +13,8 @@
   > express.js
 - Database
   > MONGO_DB
-  > JWT
+  
+-JWT
 
 #### Roll dice
 
@@ -45,4 +46,4 @@ npm run dev -> [start the server]
 
 -GET / players / ranking / winner: returns the player with the worst success rate
 
-Also there is postman collection for each end point inside of controllers/Sprint_4_rest_server.postman_collection
+Also there is postman collection for each end point inside of controllers/Roll_dice_mongodb.postman_collection
